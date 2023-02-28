@@ -104,7 +104,7 @@ func GetProductsCategories() gin.HandlerFunc {
 		var productCategories = databasehandler.GetProductCategories()
 
 		c.JSON(http.StatusOK, gin.H{
-			"products": productCategories,
+			"product_categories": productCategories,
 		})
 
 	}

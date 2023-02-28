@@ -5,18 +5,18 @@ import (
 )
 
 type Product struct {
-	Product_Id       int       `json:"product_id"`
+	Product_Id       int       `json:"id"`
 	Date_Created     time.Time `json:"date_created"`
-	Product_name     string    `json:"product_name"`
+	Product_name     string    `json:"name"`
 	Serial_number    string    `json:"serial_number"`
 	Product_quantity int       `json:"quantity"`
 	Product_price    int       `json:"price"`
 	Product_image    string    `json:"image"`
-	Category_id      int       `json:"category_id"`
+	Category_id      int       `json:"category"`
 }
 
 type ProductCategories struct {
-	Category_Id   int
-	Category_name string
-	Date_created  time.Time
+	Category_Id   int       `json:"id"`
+	Category_name string    `json:"name"`
+	Date_created  time.Time `json:"date_created"`
 }
