@@ -1,12 +1,11 @@
-package Database
+package databasehandler
 
 import (
 	"database/sql"
 	"fmt"
-
-	"os"
-
 	"github.com/joho/godotenv"
+	"main.go/mystructs"
+	"os"
 )
 
 func goDotEnvVariable(key string) string {
@@ -67,21 +66,28 @@ func AddCategories(category_name string) int {
 
 }
 
-func GetData() (string, string, string) {
+func GetProducts() []mystructs.Product {
 
-	mainFoodQuery := "SELECT meal_name FROM main_meal ORDER BY RANDOM() LIMIT 1;"
-	stewQuery := "SELECT stew FROM stew ORDER BY RANDOM() LIMIT 1;"
-	mainMeal := fetchFromDb(mainFoodQuery)
-	stew := fetchFromDb(stewQuery)
-	imageQueryParameter := fmt.Sprintf("%v and %v", mainMeal, stew)
+	query := "SELECT product_id, product_name, serial_number, product_quantity, product_price, product_image, category_id FROM product;"
+	rows, err := DbConnect().Query(query)
+	defer DbConnect().Close()
+	CheckError(err)
 
-	imageQuery := fmt.Sprintf("SELECT food_image FROM food_image where food_name = '%v' ORDER BY RANDOM() LIMIT 1;", imageQueryParameter)
-	image := fetchFromDb(imageQuery)
+	var current_product mystructs.Product
 
-	return mainMeal, stew, image
+	var productsSlice []mystructs.Product
+
+	for rows.Next() {
+		err = rows.Scan(&current_product.Product_Id, &current_product.Product_name, &current_product.Serial_number, &current_product.Product_quantity, &current_product.Product_price, &current_product.Product_image, &current_product.Product_Id)
+		productsSlice = append(productsSlice, current_product)
+		CheckError(err)
+
+	}
+
+	return productsSlice
 }
 
-func fetchFromDb(query string) string {
+func FetchFromDb(query string) string {
 
 	var data string
 	fmt.Printf("Query == %s \n", query)
