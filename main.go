@@ -17,6 +17,7 @@ func main() {
 	r.POST("/api/category", product.AddProductCategories())
 
 	r.GET("/api/product", product.GetProducts())
+	r.GET("/api/category", product.GetProductsCategories())
 
 	r.Run(":8080")
 	fmt.Println("Server started on port 8080")
