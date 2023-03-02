@@ -3,10 +3,17 @@ package databasehandler
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	"main.go/mystructs"
 	"os"
 )
+
+type User struct {
+	gorm.Model
+	Username string `gorm:"size:255;not null;unique" json:"username"`
+	Password string `gorm:"size:255;not null;" json:"password"`
+}
 
 func goDotEnvVariable(key string) string {
 
@@ -112,4 +119,22 @@ func CheckError(err error) {
 	if err != nil {
 		panic(err.Error())
 	}
+}
+
+func SaveUser(username string, password []byte) (int, error) {
+	categoryUrl := "INSERT INTO users(username, password) VALUES($1, $2)"
+
+	insertCartegory, err := DbConnect().Exec(categoryUrl, username, password)
+	defer DbConnect().Close()
+	if err != nil {
+		return 0, err
+	}
+
+	rowsaffected, err := insertCartegory.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(rowsaffected), nil
+
 }

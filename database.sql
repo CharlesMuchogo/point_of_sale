@@ -23,6 +23,14 @@ DROP TABLE IF EXISTS create table product(
     date_created timestamp default current_timestamp,
     PRIMARY KEY(category_id)
 );
+
+
+create  table users(
+    id INT GENERATED ALWAYS AS IDENTITY,
+    username varchar unique not null,
+    password text not null
+)
+
 create table transaction_logs(
     transaction_id INT GENERATED ALWAYS AS IDENTITY,
     product_name varchar(100),
