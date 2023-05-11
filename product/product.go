@@ -33,7 +33,7 @@ func AddProductCategories() gin.HandlerFunc {
 			})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"Error": "Form data not complete",
+				"Error": "From data not complete",
 			})
 		}
 
@@ -46,15 +46,17 @@ func AddProduct() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		product_name := c.DefaultPostForm("product_name", "unknown")
-
 		serial_number := c.DefaultPostForm("serial_number", "unknown")
 		product_quantity, _ := strconv.Atoi(c.DefaultPostForm("product_quantity", "unknown"))
 		product_price, _ := strconv.Atoi(c.DefaultPostForm("product_price", "unknown"))
 		product_image := c.DefaultPostForm("product_image", "unknown")
-		category_id, err := strconv.Atoi(c.DefaultPostForm("category_id", "unknown"))
+		category_id, err := strconv.Atoi(c.DefaultPostForm("category_id", "4"))
 
 		if err != nil {
-			fmt.Println("Error during conversion")
+			fmt.Printf("Error during conversion %s", err.Error())
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "product data not complete",
+			})
 			return
 		}
 		if serial_number != "unknown" || product_name != "unknown" {
@@ -91,6 +93,7 @@ func GetProducts() gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, gin.H{
 			"products": products,
+			"message":  "fetched products successfully",
 		})
 
 	}
@@ -98,7 +101,7 @@ func GetProducts() gin.HandlerFunc {
 }
 
 func GetProductsCategories() gin.HandlerFunc {
-
+	fmt.Printf("reaching here")
 	return func(c *gin.Context) {
 
 		var productCategories = databasehandler.GetProductCategories()

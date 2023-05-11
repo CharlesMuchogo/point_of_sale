@@ -74,7 +74,7 @@ func AddCategories(category_name string) int {
 }
 
 func GetProducts() []mystructs.Product {
-
+	fmt.Printf("reaching here")
 	query := "SELECT product_id, date_created, product_name, serial_number, product_quantity, product_price, product_image, category_id FROM product;"
 	rows, err := DbConnect().Query(query)
 	defer DbConnect().Close()
@@ -85,6 +85,7 @@ func GetProducts() []mystructs.Product {
 	var productsSlice []mystructs.Product
 
 	for rows.Next() {
+
 		err = rows.Scan(&current_product.Product_Id, &current_product.Date_Created, &current_product.Product_name, &current_product.Serial_number, &current_product.Product_quantity, &current_product.Product_price, &current_product.Product_image, &current_product.Product_Id)
 		productsSlice = append(productsSlice, current_product)
 		CheckError(err)
@@ -106,6 +107,7 @@ func GetProductCategories() []mystructs.ProductCategories {
 	var productCategorySlice []mystructs.ProductCategories
 
 	for rows.Next() {
+		fmt.Printf("reaching here")
 		err = rows.Scan(&current_product_category.Category_Id, &current_product_category.Category_name, &current_product_category.Date_created)
 		productCategorySlice = append(productCategorySlice, current_product_category)
 		CheckError(err)

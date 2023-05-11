@@ -13,6 +13,7 @@ type Product struct {
 	Product_price    int       `json:"price"`
 	Product_image    string    `json:"image"`
 	Category_id      int       `json:"category"`
+	description      string    `json:"description"`
 }
 
 type ProductCategories struct {
