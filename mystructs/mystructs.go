@@ -17,7 +17,8 @@ type Product struct {
 }
 
 type ProductCategories struct {
-	Category_Id   int       `json:"id"`
-	Category_name string    `json:"name"`
-	Date_created  time.Time `json:"date_created"`
+	Category_Id    int       `json:"id"`
+	Category_name  string    `json:"name"`
+	Date_created   time.Time `json:"date_created"`
+	Category_image string    `json:"image"`
 }
