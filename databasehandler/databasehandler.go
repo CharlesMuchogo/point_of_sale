@@ -27,28 +27,26 @@ func goDotEnvVariable(key string) string {
 
 func DbConnect() *sql.DB {
 	dsn := goDotEnvVariable("DATABASEURL")
-
 	db, err := sql.Open("postgres", dsn)
 
 	CheckError(err)
 	return db
 }
 
-func AddProduct(product_name string,
-	serial_number string,
-	product_quantity int,
-	product_price int,
-	product_image string,
-	category_id int) int {
+func AddProduct(
+	product mystructs.Product,
+) int {
 
-	mainFoodQuery := "INSERT INTO product(product_name, serial_number, product_quantity , product_price, product_image, category_id ) VALUES($1, $2, $3, $4, $5, $6)"
-
-	insertMainMeal, err := DbConnect().Exec(mainFoodQuery, product_name,
-		serial_number,
-		product_quantity,
-		product_price,
-		product_image,
-		category_id)
+	mainFoodQuery := "INSERT INTO product(product_name, serial_number, product_quantity , product_price, product_image, category_id, product_description ) VALUES($1, $2, $3, $4, $5, $6, $7)"
+	insertMainMeal, err := DbConnect().Exec(mainFoodQuery,
+		product.Product_name,
+		product.Serial_number,
+		product.Product_quantity,
+		product.Product_price,
+		product.Product_image,
+		product.Category_id,
+		product.Product_Description,
+	)
 	defer DbConnect().Close()
 	CheckError(err)
 
@@ -74,8 +72,7 @@ func AddCategories(category_name string) int {
 }
 
 func GetProducts() []mystructs.Product {
-	fmt.Printf("reaching here")
-	query := "SELECT product_id, date_created, product_name, serial_number, product_quantity, product_price, product_image, category_id FROM product;"
+	query := "SELECT product_id, date_created, product_name, serial_number, product_quantity, product_price, product_image, category_id, COALESCE(product_description,'null')  FROM product;"
 	rows, err := DbConnect().Query(query)
 	defer DbConnect().Close()
 	CheckError(err)
@@ -86,7 +83,7 @@ func GetProducts() []mystructs.Product {
 
 	for rows.Next() {
 
-		err = rows.Scan(&current_product.Product_Id, &current_product.Date_Created, &current_product.Product_name, &current_product.Serial_number, &current_product.Product_quantity, &current_product.Product_price, &current_product.Product_image, &current_product.Product_Id)
+		err = rows.Scan(&current_product.Product_Id, &current_product.Date_Created, &current_product.Product_name, &current_product.Serial_number, &current_product.Product_quantity, &current_product.Product_price, &current_product.Product_image, &current_product.Product_Id, &current_product.Product_Description)
 		productsSlice = append(productsSlice, current_product)
 		CheckError(err)
 

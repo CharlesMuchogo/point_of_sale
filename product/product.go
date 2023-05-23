@@ -3,6 +3,7 @@ package product
 import (
 	"fmt"
 	"main.go/databasehandler"
+	"main.go/mystructs"
 
 	"net/http"
 	"strconv"
@@ -51,6 +52,7 @@ func AddProduct() gin.HandlerFunc {
 		product_price, _ := strconv.Atoi(c.DefaultPostForm("product_price", "unknown"))
 		product_image := c.DefaultPostForm("product_image", "unknown")
 		category_id, err := strconv.Atoi(c.DefaultPostForm("category_id", "4"))
+		product_description := c.DefaultPostForm("product_description", "unknown")
 
 		if err != nil {
 			fmt.Printf("Error during conversion %s", err.Error())
@@ -60,10 +62,16 @@ func AddProduct() gin.HandlerFunc {
 			return
 		}
 		if serial_number != "unknown" || product_name != "unknown" {
-			fmt.Printf("food to add is  - %v", product_price)
-			fmt.Printf("image to add is  - %v", product_quantity)
+			var product_to_add mystructs.Product
+			product_to_add.Product_name = product_name
+			product_to_add.Serial_number = serial_number
+			product_to_add.Product_quantity = product_quantity
+			product_to_add.Product_price = product_price
+			product_to_add.Product_image = product_image
+			product_to_add.Category_id = category_id
+			product_to_add.Product_Description = product_description
 
-			status := databasehandler.AddProduct(product_name, serial_number, product_quantity, product_price, product_image, category_id)
+			status := databasehandler.AddProduct(product_to_add)
 			var message string
 
 			if status < 1 {
