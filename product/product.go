@@ -85,7 +85,7 @@ func AddProduct() gin.HandlerFunc {
 			})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "product data not complete",
+				"message": "product data is not complete",
 			})
 		}
 
