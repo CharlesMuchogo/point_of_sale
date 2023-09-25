@@ -2,27 +2,30 @@ package main
 
 import (
 	"fmt"
-	"main.go/product"
-	"main.go/user"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"main.go/databasehandler"
+	"main.go/product"
+	"main.go/user"
+	"main.go/utils"
 )
 
 func main() {
+	databasehandler.InitializeDatabase(utils.GoDotEnvVariable("DATABASEURL"))
+	databasehandler.Migrate()
 	//gin.SetMode(gin.ReleaseMode)
 
 	r := gin.Default()
 	public := r.Group("/api")
 	public.POST("/register", user.Register)
 
-	r.POST("/api/product", product.AddProduct())
-	r.POST("/api/category", product.AddProductCategories())
+	r.POST("/api/products", product.AddProduct())
+	r.POST("/api/categories", product.AddProductCategories())
 
-	r.GET("/api/product", product.GetProducts())
-	r.GET("/api/category", product.GetProductsCategories())
+	r.GET("/api/products", product.GetProducts())
+	r.GET("/api/categories", product.GetProductsCategories())
 
-	r.Run(":8080")
-	fmt.Println("Server started on port 8080")
+	r.Run(":8005")
+	fmt.Println("Server started on port 8005")
 
 }

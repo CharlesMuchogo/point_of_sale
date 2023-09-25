@@ -1,42 +1,27 @@
 package product
 
 import (
-	"fmt"
 	"main.go/databasehandler"
 	"main.go/mystructs"
 
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func AddProductCategories() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-
-		category_name := c.DefaultPostForm("category_name", "unknown")
-
-		if category_name != "unknown" {
-			fmt.Printf("category name to add is  - %v", category_name)
-
-			status := databasehandler.AddCategories(category_name)
-
-			message := "Error adding category"
-			if status < 1 {
-				message = "Error adding category"
-			} else {
-				message = "category added"
-			}
-
-			c.JSON(http.StatusOK, gin.H{
-				"message": message,
-			})
-		} else {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"Error": "From data not complete",
-			})
+		var category mystructs.ProductCategories
+		if err := c.ShouldBindJSON(&category); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			c.Abort()
+			return
 		}
+
+		databasehandler.AddCategories(category)
+		c.JSON(http.StatusCreated, gin.H{
+			"message": "Product category added",
+		})
 
 	}
 
@@ -45,49 +30,18 @@ func AddProductCategories() gin.HandlerFunc {
 func AddProduct() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
-
-		product_name := c.DefaultPostForm("product_name", "unknown")
-		serial_number := c.DefaultPostForm("serial_number", "unknown")
-		product_quantity, _ := strconv.Atoi(c.DefaultPostForm("product_quantity", "unknown"))
-		product_price, _ := strconv.Atoi(c.DefaultPostForm("product_price", "unknown"))
-		product_image := c.DefaultPostForm("product_image", "unknown")
-		category_id, err := strconv.Atoi(c.DefaultPostForm("category_id", "4"))
-		product_description := c.DefaultPostForm("product_description", "unknown")
-
-		if err != nil {
-			fmt.Printf("Error during conversion %s", err.Error())
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "product data not complete",
-			})
+		var product mystructs.Product
+		if err := c.ShouldBindJSON(&product); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			c.Abort()
 			return
 		}
-		if serial_number != "unknown" || product_name != "unknown" {
-			var product_to_add mystructs.Product
-			product_to_add.Product_name = product_name
-			product_to_add.Serial_number = serial_number
-			product_to_add.Product_quantity = product_quantity
-			product_to_add.Product_price = product_price
-			product_to_add.Product_image = product_image
-			product_to_add.Category_id = category_id
-			product_to_add.Product_Description = product_description
 
-			status := databasehandler.AddProduct(product_to_add)
-			var message string
+		databasehandler.AddProduct(product)
 
-			if status < 1 {
-				message = "Error adding product"
-			} else {
-				message = "product added successfully"
-			}
-
-			c.JSON(http.StatusOK, gin.H{
-				"message": message,
-			})
-		} else {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "product data is not complete.",
-			})
-		}
+		c.JSON(http.StatusCreated, gin.H{
+			"message": "Product added successfully",
+		})
 
 	}
 
@@ -101,7 +55,6 @@ func GetProducts() gin.HandlerFunc {
 
 		c.JSON(http.StatusOK, gin.H{
 			"products": products,
-			"message":  "fetched products successfully",
 		})
 
 	}
@@ -109,13 +62,12 @@ func GetProducts() gin.HandlerFunc {
 }
 
 func GetProductsCategories() gin.HandlerFunc {
-	fmt.Printf("reaching here")
 	return func(c *gin.Context) {
 
 		var productCategories = databasehandler.GetProductCategories()
 
 		c.JSON(http.StatusOK, gin.H{
-			"product_categories": productCategories,
+			"Categories": productCategories,
 		})
 
 	}
