@@ -1,9 +1,7 @@
 package mystructs
 
-import "gorm.io/gorm"
-
 type Product struct {
-	gorm.Model
+	Id                  uint   `gorm:"primaryKey" json:"id"`
 	Product_name        string `json:"name"`
 	Serial_number       string `json:"serial_number"`
 	Product_quantity    int    `json:"quantity"`
@@ -14,7 +12,7 @@ type Product struct {
 }
 
 type ProductCategories struct {
-	gorm.Model
+	Id             uint   `gorm:"primaryKey" json:"id"`
 	Category_name  string `json:"name"`
 	Category_image string `json:"image"`
 }

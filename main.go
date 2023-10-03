@@ -3,15 +3,21 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"log"
 	"main.go/databasehandler"
 	"main.go/product"
 	"main.go/user"
-	"main.go/utils"
 )
 
 func main() {
-	databasehandler.InitializeDatabase(utils.GoDotEnvVariable("DATABASEURL"))
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	connectionString := databasehandler.GetPostgresConnectionString()
+	databasehandler.InitializeDatabase(connectionString)
 	databasehandler.Migrate()
 	//gin.SetMode(gin.ReleaseMode)
 
@@ -27,5 +33,4 @@ func main() {
 
 	r.Run(":8005")
 	fmt.Println("Server started on port 8005")
-
 }
