@@ -1,18 +1,18 @@
 package mystructs
 
 type Product struct {
-	Id                  uint   `gorm:"primaryKey" json:"id"`
-	Product_name        string `json:"name"`
-	Serial_number       string `json:"serial_number"`
-	Product_quantity    int    `json:"quantity"`
-	Product_price       int    `json:"price"`
-	Product_image       string `json:"image"`
-	Category_id         int    `json:"category"`
-	Product_Description string `json:"description"`
+	Id                 uint   `gorm:"primaryKey" json:"id"`
+	ProductName        string `json:"name"`
+	SerialNumber       string `json:"serial_number"`
+	ProductQuantity    int    `json:"quantity"`
+	ProductPrice       int    `json:"price"`
+	ProductImage       string `json:"image"`
+	CategoryId         int    `json:"category"`
+	ProductDescription string `json:"description"`
 }
 
 type ProductCategories struct {
-	Id             uint   `gorm:"primaryKey" json:"id"`
-	Category_name  string `json:"name"`
-	Category_image string `json:"image"`
+	Id            uint   `gorm:"primaryKey" json:"id"`
+	CategoryName  string `json:"name"`
+	CategoryImage string `json:"image"`
 }
