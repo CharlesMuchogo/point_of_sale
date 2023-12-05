@@ -40,8 +40,6 @@ jobs:
 
       run: |
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
-        ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} '
-          # Add your commands here
+        ssh -i private_key.pem ${HOSTNAME}
           echo "Logged in via SSH!"
-          # You can add further commands such as pulling the Docker image,  stopping containers, etc.
-        '
+        
