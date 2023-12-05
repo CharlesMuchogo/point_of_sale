@@ -35,9 +35,7 @@ jobs:
     - name: SSH Into the server
       env:
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        HOSTNAME: ${{ secrets.SSH_HOST }}
-        USER_NAME: ${{ secrets.USER_NAME }}
-
+        HOSTNAME: ${{ secrets.HOST_NAME }}
       run: |
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ${HOSTNAME}
