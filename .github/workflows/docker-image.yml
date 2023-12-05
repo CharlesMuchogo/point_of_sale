@@ -40,4 +40,8 @@ jobs:
         echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
         ssh -o StrictHostKeyChecking=no -i private_key.pem ${HOSTNAME}
           echo "Logged in via SSH!"
+
+          curl -X POST -H 'Content-type: application/json' --data '{
+           "text": "Docker image build and deploy successful!"
+          }' ${{ secrets.SLACK_WEBHOOK_URL }}
         
