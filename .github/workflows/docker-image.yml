@@ -39,9 +39,9 @@ jobs:
         USER_NAME: ${{ secrets.USER_NAME }}
 
       run: |
-        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+        echo "$PRIVATE_KEY" > private_key.pem && chmod 600 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME} '
           # Add your commands here
           echo "Logged in via SSH!"
-          # You can add further commands such as pulling the Docker image, stopping containers, etc.
+          # You can add further commands such as pulling the Docker image,  stopping containers, etc.
         '
