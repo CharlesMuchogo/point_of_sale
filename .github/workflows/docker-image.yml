@@ -12,6 +12,12 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
+      
+    - name: Spees test
+      run: apt install speedtest-cli
+
+    - name: Run the speed test
+      run: speedtest-cli
 
     - name: Build Docker image
       env:
